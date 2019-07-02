@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"fmt"
 	"go.coder.com/cli"
 	"go.coder.com/flog"
 	"os"
@@ -30,10 +29,8 @@ func (c *cmd) Run(fl *flag.FlagSet) {
 	if err != nil {
 		flog.Fatal("failed to parse test events: %v", err)
 	}
-	fmt.Printf("%+v\n", events)
-
 	rankedTests := rank(events)
-	fmt.Printf("%+v\n", rankedTests)
+	printTests(rankedTests, os.Stdout)
 }
 
 func (c *cmd) Spec() cli.CommandSpec {

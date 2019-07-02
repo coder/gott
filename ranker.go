@@ -1,10 +1,12 @@
 package main
 
 import (
-	"go.coder.com/flog"
+	"fmt"
+	"github.com/fatih/color"
+	"github.com/juju/ansiterm"
+	"io"
 	"regexp"
 	"sort"
-	"strings"
 	"time"
 )
 
@@ -25,29 +27,34 @@ func rank(events []testEvent) []rankedTest {
 			continue
 		}
 
-		durLoc := durationRegex.FindStringIndex(ev.Output)
-		if durLoc == nil {
-			// This test is unknown.
-			continue
-		}
-		durMatch := ev.Output[durLoc[0]:durLoc[1]]
-
-		timeRunning, err := time.ParseDuration(strings.Trim(durMatch, "()"))
-		if err != nil {
-			flog.Error("failed to parse %q: %v", ev.Output, err)
-			continue
-		}
-
 		tests = append(tests, rankedTest{
-			timeRunning: timeRunning,
+			// Convert to millisecond precision.
+			timeRunning: time.Duration(ev.Elapsed*1000) * time.Millisecond,
 			test:        ev.Test,
 			passed:      ev.Action == "pass",
 		})
 	}
 
 	sort.Slice(tests, func(i, j int) bool {
-		return tests[i].timeRunning < tests[j].timeRunning
+		return tests[i].timeRunning > tests[j].timeRunning
 	})
 
 	return tests
+}
+
+func printTests(tests []rankedTest, wr io.Writer) {
+	twr := ansiterm.NewTabWriter(wr, 8, 4, 1, ' ', 0)
+	for _, tc := range tests {
+		var passFail string
+		if tc.passed {
+			passFail = color.New(color.FgWhite, color.BgHiGreen, color.Bold).Sprint(" PASS ")
+		} else {
+			passFail = color.New(color.FgWhite, color.BgHiRed, color.Bold).Sprint(" FAIL ")
+		}
+		if tc.test == "" {
+			tc.test = color.New(color.Bold).Sprint("TOTAL")
+		}
+		fmt.Fprintf(twr, "%v\t%v\t%v\n", passFail, tc.test, tc.timeRunning)
+	}
+	twr.Flush()
 }

@@ -23,4 +23,8 @@ func TestA(t *testing.T) {
 
 func TestB(t *testing.T) {
 	time.Sleep(basis)
+	t.Run("BigFail", func(t *testing.T){
+		time.Sleep(basis*4)
+	    t.Fail()
+	})
 }
