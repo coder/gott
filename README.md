@@ -2,6 +2,10 @@
 
 `gott` is a command-line utility which finds your most time-consuming Go tests.
 
+## Install
+
+`go install go.coder.com/gott`
+
 ## Example
 
 ```
