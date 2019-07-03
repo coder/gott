@@ -63,6 +63,10 @@ func rank(events []testEvent) *rankedTestTree {
 }
 
 func (c *cmd) printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
+	for _, ch := range tree.children {
+		c.printTests(ch, wr)
+	}
+
 	if !tree.root() {
 		var passFail string
 		if tree.passed {
@@ -106,9 +110,5 @@ func (c *cmd) printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
 		fmt.Fprintf(wr, "%v\t%v\t%v\n",
 			passFail, prefix+testName, timeRunningStr,
 		)
-	}
-
-	for _, ch := range tree.children {
-		c.printTests(ch, wr)
 	}
 }
