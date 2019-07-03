@@ -21,7 +21,7 @@ func (r rankedTest) degree() int {
 }
 
 func (r rankedTest) parentOf(b rankedTest) bool {
-	return strings.HasPrefix(b.test, r.test + "/")
+	return strings.HasPrefix(b.test, r.test+"/")
 }
 
 var durationRegex = regexp.MustCompile(`(.*)`)
@@ -62,11 +62,7 @@ func rank(events []testEvent) *rankedTestTree {
 	return tree
 }
 
-func printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
-	for _, ch := range tree.children {
-		printTests(ch, wr)
-	}
-
+func (c *cmd) printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
 	if !tree.root() {
 		var passFail string
 		if tree.passed {
@@ -74,20 +70,45 @@ func printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
 		} else {
 			passFail = color.New(color.FgWhite, color.BgHiRed, color.Bold).Sprint(" ✖ ")
 		}
-		if tree.test == "" {
-			tree.test = color.New(color.Bold).Sprint("TOTAL")
+		var timeRunningStr string
+
+		// The empty test is the total.
+		if tree.test != "" {
+			childrenTakeStr := tree.childrenTake().String()
+			if tree.childrenTake() == 0 {
+				childrenTakeStr = ""
+			}
+
+			timeRunningStr = tree.timeRunning.String() + "\t" + childrenTakeStr
+		} else {
+			timeRunningStr = tree.timeRunning.String()
+		}
+		// Unknown or maybe 0.
+		if tree.timeRunning == 0 {
+			timeRunningStr = "\t" + tree.childrenTake().String()
 		}
 
-		timeRunningStr := tree.timeRunning.String()
-		if tree.timeRunning == 0 {
-			timeRunningStr = "?"
+		var testName string
+		if tree.test == "" {
+			testName = color.New(color.Bold).Sprint("TOTAL")
+		} else {
+			testName = tree.test
 		}
+
+		// Bold degree 0 values.
 		if tree.degree() == 0 {
 			timeRunningStr = color.New(color.Bold).Sprint(timeRunningStr)
+			testName = color.New(color.Bold).Sprint(testName)
 		}
 
 		prefix := strings.Repeat("--- ", tree.degree())
 
-		fmt.Fprintf(wr, "%v\t%v\t%v\n", passFail, prefix + tree.test, timeRunningStr)
+		fmt.Fprintf(wr, "%v\t%v\t%v\n",
+			passFail, prefix+testName, timeRunningStr,
+		)
+	}
+
+	for _, ch := range tree.children {
+		c.printTests(ch, wr)
 	}
 }

@@ -9,10 +9,12 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"time"
 )
 
 type cmd struct {
 	passthrough bool
+	cutoff      time.Duration
 }
 
 func (c *cmd) Run(fl *flag.FlagSet) {
@@ -47,7 +49,7 @@ func (c *cmd) Run(fl *flag.FlagSet) {
 
 	testTree := rank(events)
 	twr := ansiterm.NewTabWriter(os.Stdout, 6, 4, 1, ' ', 0)
-	printTests(testTree, twr)
+	c.printTests(testTree, twr)
 	twr.Flush()
 }
 
@@ -61,6 +63,7 @@ func (c *cmd) Spec() cli.CommandSpec {
 
 func (c *cmd) RegisterFlags(fl *flag.FlagSet) {
 	fl.BoolVar(&c.passthrough, "p", false, "pass through go test output")
+	fl.DurationVar(&c.cutoff, "c", 0, "omit entries that take less than this much time")
 }
 
 func main() {
