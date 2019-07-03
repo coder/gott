@@ -11,10 +11,11 @@
 ```
 go test -v | gott
 
- FAIL   TOTAL        433ms
- FAIL   TestB         50ms
- FAIL   TestB/BigFail 40ms
- PASS   TestA         30ms
- PASS   TestA/A       20ms
- PASS   TestA/B       10ms
+ ✔    --- TestA/A        20ms
+ ✔    --- --- TestA/B/BB 10ms
+ ✔    --- TestA/B        20ms
+ ✔    TestA              40ms
+ ✖    --- TestB/BigFail  40ms
+ ✖    TestB              50ms
+ ✖    TOTAL              368ms
 ```

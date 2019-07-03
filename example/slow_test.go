@@ -16,6 +16,10 @@ func TestA(t *testing.T) {
 	})
 	t.Run("B", func(t *testing.T) {
 		time.Sleep(basis)
+
+		t.Run("BB", func(t *testing.T) {
+			time.Sleep(basis)
+		})
 	})
 
 	time.Sleep(basis)
