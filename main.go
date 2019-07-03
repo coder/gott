@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"github.com/fatih/color"
 	"github.com/juju/ansiterm"
 	"go.coder.com/cli"
 	"go.coder.com/flog"
@@ -15,6 +16,12 @@ import (
 type cmd struct {
 	passthrough bool
 	cutoff      time.Duration
+}
+
+func init() {
+	if os.Getenv("FORCE_COLOR") != "" {
+		color.NoColor = false
+	}
 }
 
 func (c *cmd) Run(fl *flag.FlagSet) {
