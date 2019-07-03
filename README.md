@@ -1,6 +1,6 @@
 # Go Test Timer
 
-`gott` is a command-line utility which finds your most time-consuming Go tests.
+`gott` finds your most time-consuming Go tests.
 
 ## Install
 
@@ -43,9 +43,9 @@ gott flags:
 
 `go test` reports how long a test function takes to return. Test functions don't wait on their
 parallel children, so it can be difficult to answer the question _"How long did this test and
-all of it's children take?"_.
+all of its children take?"_.
 
-`gott` solves this by providing the time it took for the function to return followed by the time it
+`gott` provides how long it took for the test function to return followed by the time it
 took for all children to return.
 
 ## Ranking Algorithm
