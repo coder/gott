@@ -76,6 +76,10 @@ func (c *cmd) printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
 		}
 		var timeRunningStr string
 
+		if maxDur(tree.childrenTake(), tree.timeRunning) < c.cutoff {
+			return
+		}
+
 		// The empty test is the total.
 		if tree.test != "" {
 			childrenTakeStr := tree.childrenTake().String()
