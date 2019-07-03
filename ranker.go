@@ -80,17 +80,12 @@ func (c *cmd) printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
 			return
 		}
 
-		// The empty test is the total.
-		if tree.test != "" {
-			childrenTakeStr := tree.childrenTake().String()
-			if tree.childrenTake() == 0 {
-				childrenTakeStr = ""
-			}
-
-			timeRunningStr = tree.timeRunning.String() + "\t" + childrenTakeStr
-		} else {
-			timeRunningStr = tree.timeRunning.String()
+		childrenTakeStr := tree.childrenTake().String()
+		if tree.childrenTake() == 0 {
+			childrenTakeStr = ""
 		}
+		timeRunningStr = tree.timeRunning.String() + "\t" + childrenTakeStr
+
 		// Unknown or maybe 0.
 		if tree.timeRunning == 0 {
 			timeRunningStr = "\t" + tree.childrenTake().String()
