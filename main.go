@@ -15,6 +15,7 @@ import (
 
 type cmd struct {
 	passthrough bool
+	noEmoji     bool
 	cutoff      time.Duration
 }
 
@@ -70,6 +71,7 @@ func (c *cmd) Spec() cli.CommandSpec {
 
 func (c *cmd) RegisterFlags(fl *flag.FlagSet) {
 	fl.BoolVar(&c.passthrough, "p", false, "pass through go test output")
+	fl.BoolVar(&c.noEmoji, "no-emoji", false, "don't use emojis")
 	fl.DurationVar(&c.cutoff, "c", 0, "omit entries that take less than this much time")
 }
 

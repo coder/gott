@@ -62,6 +62,20 @@ func rank(events []testEvent) *rankedTestTree {
 	return tree
 }
 
+func (c *cmd) passMsg() string {
+	if c.noEmoji {
+		return " PASS "
+	}
+	return " ✔ "
+}
+
+func (c *cmd) failMsg() string {
+	if c.noEmoji {
+		return " FAIL "
+	}
+	return " ✖ "
+}
+
 func (c *cmd) printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
 	for _, ch := range tree.children {
 		c.printTests(ch, wr)
@@ -70,9 +84,9 @@ func (c *cmd) printTests(tree *rankedTestTree, wr *ansiterm.TabWriter) {
 	if !tree.root() {
 		var passFail string
 		if tree.passed {
-			passFail = color.New(color.FgWhite, color.BgHiGreen, color.Bold).Sprint(" ✔ ")
+			passFail = color.New(color.FgWhite, color.BgHiGreen, color.Bold).Sprint(c.passMsg())
 		} else {
-			passFail = color.New(color.FgWhite, color.BgHiRed, color.Bold).Sprint(" ✖ ")
+			passFail = color.New(color.FgWhite, color.BgHiRed, color.Bold).Sprint(c.failMsg())
 		}
 		var timeRunningStr string
 
