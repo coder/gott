@@ -65,7 +65,7 @@ func (c *cmd) Spec() cli.CommandSpec {
 	return cli.CommandSpec{
 		Name:  "gott",
 		Usage: "[flags]",
-		Desc:  `Parses go test verbose output and produces a list of tests sorted by how time consuming they are.`,
+		Desc:  `Parses go test verbose output to produce a list of tests sorted from shortest to longest.`,
 	}
 }
 

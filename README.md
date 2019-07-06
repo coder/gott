@@ -1,6 +1,6 @@
 # Go Test Timer
 
-`gott` finds your most time-consuming Go tests.
+`gott` finds the most time-consuming tests in large suites.
 
 ## Install
 
@@ -11,20 +11,13 @@
 ```
 go test -v | gott
 
- ✔    TOTAL                                                           9.73s
- ✔    Test_getConfiguration                                           5.71s 17.96s
- ✔    --- Test_getConfiguration/GetSetupMode                                2.32s
- ✔    --- --- Test_getConfiguration/GetSetupMode/NotSetupMode         1.12s
- ✔    --- --- Test_getConfiguration/GetSetupMode/SetupMode            1.2s
- ✔    --- Test_getConfiguration/PostSetupMode                               2.86s
- ✔    --- --- Test_getConfiguration/PostSetupMode/Authorized          1.34s
- ✔    --- --- Test_getConfiguration/PostSetupMode/Unauthorized        1.52s
- ✔    --- Test_getConfiguration/SetupMode                                   12.78s
- ✔    --- --- Test_getConfiguration/SetupMode/BadConfiguration        2.29s
- ✔    --- --- Test_getConfiguration/SetupMode/Authorized              2.33s
- ✔    --- --- Test_getConfiguration/SetupMode/OnlyConfigurationRoutes 2.52s
- ✔    --- --- Test_getConfiguration/SetupMode/NoAuth                  2.65s
- ✔    --- --- Test_getConfiguration/SetupMode/ExitSetupMode           2.99s
+ ✔    --- TestA/A        20ms
+ ✔    --- --- TestA/B/BB 10ms
+ ✔    --- TestA/B        20ms  10ms
+ ✔    TestA              40ms  40ms
+ ✖    --- TestB/BigFail  50ms
+ ✖    TestB              10ms  50ms
+ ✖    TOTAL              562ms
 ```
 
 ## Usage
@@ -45,11 +38,15 @@ gott flags:
 parallel children, so it can be difficult to answer the question _"How long did this test and
 all of its children take?"_.
 
+The first column of durations is the time it took for the test function to return.
+
+The second column is the time it took for all children to return.
+
 `gott` provides how long it took for the test function to return followed by the time it
 took for all children to return.
 
 ## Ranking Algorithm
 
-`gott` orders test output by `max(testTook, childrenTook)`.
+`gott` orders outputted tests by `max(testTook, childrenTook)`.
 
 The longest test cases are at the bottom to reduce scrolling.

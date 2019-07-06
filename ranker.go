@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"github.com/juju/ansiterm"
+	"go.coder.com/flog"
 	"regexp"
 	"sort"
 	"strings"
@@ -52,8 +53,7 @@ func rank(events []testEvent) *rankedTestTree {
 
 	for _, v := range tests {
 		if !tree.insert(v) {
-			fmt.Println(v.test)
-			panic("failed to insert test into tree, bad algorithm")
+			flog.Error("failed to insert test %q into tree", v.test)
 		}
 	}
 
