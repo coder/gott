@@ -38,12 +38,11 @@ gott flags:
 parallel children, so it can be difficult to answer the question _"How long did this test and
 all of its children take?"_.
 
-The first column of durations is the time it took for the test function to return.
+In `gott`,
 
-The second column is the time it took for all children to return.
+The first column of durations show how long the test functions took to return.
 
-`gott` provides how long it took for the test function to return followed by the time it
-took for all children to return.
+The second column shows long it took for all children to return.
 
 ## Ranking Algorithm
 
