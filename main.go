@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
-	"flag"
 	"github.com/fatih/color"
 	"github.com/juju/ansiterm"
+	"github.com/spf13/pflag"
 	"go.coder.com/cli"
 	"go.coder.com/flog"
 	"io"
@@ -25,7 +25,7 @@ func init() {
 	}
 }
 
-func (c *cmd) Run(fl *flag.FlagSet) {
+func (c *cmd) Run(fl *pflag.FlagSet) {
 	var test2jsonOutput bytes.Buffer
 	test2json := exec.Command("go", "tool", "test2json", "-t")
 	stdin, err := test2json.StdinPipe()
@@ -69,7 +69,7 @@ func (c *cmd) Spec() cli.CommandSpec {
 	}
 }
 
-func (c *cmd) RegisterFlags(fl *flag.FlagSet) {
+func (c *cmd) RegisterFlags(fl *pflag.FlagSet) {
 	fl.BoolVar(&c.passthrough, "p", false, "pass through go test output")
 	fl.BoolVar(&c.noEmoji, "no-emoji", false, "don't use emojis")
 	fl.DurationVar(&c.cutoff, "c", 0, "omit entries that take less than this much time")
